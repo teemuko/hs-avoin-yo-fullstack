@@ -9,6 +9,44 @@ const Button = ({ handleClick, text }) => (
   </button>
 )
 
+const Statistic = ({label, value}) => {
+  return (
+    <tr>
+      <td>{label}</td>
+      <td>{value}</td>
+    </tr>
+  )
+}
+
+const Statistics =
+  ({labels, good, neutral,
+    bad, total, average,
+    positive}) => {
+
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return (
+      <div>
+        <p>Ei yhtään palautetta annettu</p>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <table>
+        <tbody>
+          <Statistic label={labels.labelGood} value={good} />
+          <Statistic label={labels.labelNeutral} value={neutral} />
+          <Statistic label={labels.labelBad} value={bad} />
+          <Statistic label={labels.labelTotal} value={total} />
+          <Statistic label={labels.labelAverage} value={average} />
+          <Statistic label={labels.labelPositive} value={positive} />
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
@@ -18,12 +56,14 @@ const App = () => {
   const [average, setAverage] = useState(0)
   const [positive, setPositive] = useState(0)
 
-  const labelGood = 'hyvä'
-  const labelNeutral = 'neutraali'
-  const labelBad = 'huono'
-  const labelTotal = 'yhteensä'
-  const labelAverage = 'keskiarvo'
-  const labelPositive = 'positiivisia'
+  const labels = {
+    labelGood: 'hyvä',
+    labelNeutral: 'neutraali',
+    labelBad: 'huono',
+    labelTotal: 'yhteensä',
+    labelAverage: 'keskiarvo',
+    labelPositive: 'positiivisia'
+  }
 
   const handleGoodClick = () => {
     setGood(good + 1)
@@ -54,24 +94,25 @@ const App = () => {
       <h2>anna palautetta</h2>
       <div>
         <Button
-          handleClick={handleGoodClick} text={labelGood}
+          handleClick={handleGoodClick}
+          text={labels.labelGood}
         />
         <Button
-          handleClick={handleNeutralClick} text={labelNeutral}
+          handleClick={handleNeutralClick}
+          text={labels.labelNeutral}
         />
         <Button
-          handleClick={handleBadClick} text={labelBad}
+          handleClick={handleBadClick}
+          text={labels.labelBad}
         />
       </div>
       <h2>statistiikka</h2>
-      <div>
-        <p>{labelGood} {good}</p>
-        <p>{labelNeutral} {neutral}</p>
-        <p>{labelBad} {bad}</p>
-        <p>{labelTotal} {total}</p>
-        <p>{labelAverage} {average}</p>
-        <p>{labelPositive} {positive} %</p>
-      </div>
+      <Statistics
+        labels={labels} good={good}
+        neutral={neutral} bad={bad}
+        total={total} average={average}
+        positive={positive}
+      />
     </div>
   )
 }

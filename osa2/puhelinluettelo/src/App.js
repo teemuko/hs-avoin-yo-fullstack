@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import Person from './components/Person'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import PersonList from './components/PersonList'
 
 const App = () => {
   const [ persons, setPersons] = useState([
@@ -18,13 +20,6 @@ const App = () => {
           person.name.toLowerCase()
             .indexOf(filter.toLowerCase()) > -1
       ))
-
-  const rows = () => filteredPersons.map(person =>
-    <Person
-      key={person.name}
-      person={person}
-    />
-  )
 
   const clearInputFields = () => {
     setNewName('')
@@ -67,33 +62,17 @@ const App = () => {
   return (
     <div>
       <h1>Puhelinluettelo</h1>
-      <div>
-        rajaa näytettäviä <input
-                            value={filter}
-                            onChange={handleFilterChange}
-                          />
-      </div>
+      <Filter
+        filter={filter} handler={handleFilterChange}
+      />
       <h2>lisää uusi</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          nimi: <input
-                  value={newName}
-                  onChange={handleNameChange}
-                />
-        </div>
-        <div>numero: <input
-                       value={newPhone}
-                       onChange={handlePhoneChange}
-                     />
-        </div>
-        <div>
-          <button type="submit">lisää</button>
-        </div>
-      </form>
+      <PersonForm
+        onSubmit={addPerson}
+        nameValue={newName} nameHandler={handleNameChange}
+        phoneValue={newPhone} phoneHandler={handlePhoneChange}
+      />
       <h2>Numerot</h2>
-      <div>
-        {rows()}
-      </div>
+      <PersonList persons={filteredPersons} />
     </div>
   )
 

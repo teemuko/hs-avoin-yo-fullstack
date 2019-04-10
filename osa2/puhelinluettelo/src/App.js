@@ -1,18 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import PersonList from './components/PersonList'
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas', phone: '040-123456' },
-    { name: 'Martti Tienari', phone: '040-654321' },
-    { name: 'Arto Järvinen', phone: '040-987654' },
-    { name: 'Lea Kutvonen', phone: '040-456123' }
-  ])
+  const [ persons, setPersons] = useState([])
   const [ newName, setNewName ] = useState('')
-  const [ newPhone, setNewPhone ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+
+  const hook = () => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }
+
+  useEffect(hook, [])
 
   const filteredPersons = (filter === '')
       ? persons
@@ -23,7 +31,7 @@ const App = () => {
 
   const clearInputFields = () => {
     setNewName('')
-    setNewPhone('')
+    setNewNumber('')
   }
 
   const addPerson = (event) => {
@@ -40,7 +48,7 @@ const App = () => {
 
     const personObject = {
       name: newName,
-      phone: newPhone
+      number: newNumber
     }
 
     setPersons(persons.concat(personObject))
@@ -51,8 +59,8 @@ const App = () => {
     setNewName(event.target.value)
   }
 
-  const handlePhoneChange = (event) => {
-    setNewPhone(event.target.value)
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
   }
 
   const handleFilterChange = (event) => {
@@ -69,7 +77,7 @@ const App = () => {
       <PersonForm
         onSubmit={addPerson}
         nameValue={newName} nameHandler={handleNameChange}
-        phoneValue={newPhone} phoneHandler={handlePhoneChange}
+        numberValue={newNumber} numberHandler={handleNumberChange}
       />
       <h2>Numerot</h2>
       <PersonList persons={filteredPersons} />

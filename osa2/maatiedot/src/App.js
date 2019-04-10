@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Country from './components/Country'
 import CountryName from './components/CountryName'
 import Filter from './components/Filter'
 
@@ -24,21 +25,23 @@ const App = () => {
             .indexOf(filter.toLowerCase()) > -1
       ))
 
-  const rows = () => filteredCountries.map(country =>
-    <CountryName
-      key={country.name}
-      name={country.name}
-    />
-  )
-
-  const result = () => {
-    let rowData = rows()
-    let rowCount = rowData.length
+  const rows = () => {
+    let rowCount = filteredCountries.length
 
     if (rowCount > 10) {
       return 'Too many matches, specify another filter'
+
+    } else if (rowCount === 1) {
+      return <Country
+               country={filteredCountries[0]}
+             />
     } else {
-      return rowData
+      return filteredCountries.map(country =>
+               <CountryName
+                key={country.name}
+                name={country.name}
+               />
+             )
     }
   }
 
@@ -52,25 +55,8 @@ const App = () => {
         value={filter} handler={handleFilterChange}
       />
       <div>
-        {result()}
-        {/*rows()*/}
+        {rows()}
       </div>
-      {/*
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      */}
     </div>
   );
 }

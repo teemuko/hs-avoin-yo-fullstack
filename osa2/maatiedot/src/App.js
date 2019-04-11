@@ -25,6 +25,11 @@ const App = () => {
             .indexOf(filter.toLowerCase()) > -1
       ))
 
+  const showCountry = (name, event) => {
+    event.preventDefault()
+    setFilter(name)
+  }
+
   const rows = () => {
     let rowCount = filteredCountries.length
 
@@ -40,6 +45,7 @@ const App = () => {
                <CountryName
                 key={country.name}
                 name={country.name}
+                handler={showCountry}
                />
              )
     }

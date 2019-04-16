@@ -1,11 +1,33 @@
 import React from 'react'
+import personService from '../services/persons.js'
 import Person from './Person'
 
-const PersonList = ({ persons }) => {
+const PersonList = ({ persons, setPersons }) => {
+  const deletePerson = id => {
+    const selectedPerson = persons.find(person =>
+      person.id === id)
+
+    if (!window.confirm(`Poistetaanko ${selectedPerson.name}?`)) {
+      return;
+    }
+    console.log('Deleting id:', id)
+
+    personService
+      .sendDelete(id)
+      .then(response => {
+        const remainingPersons = persons.filter(person =>
+          person.id !== id
+        )
+        setPersons(remainingPersons)
+        console.log('Delete done for id:', id)
+      })
+  }
+
   const rows = () => persons.map(person =>
     <Person
       key={person.name}
       person={person}
+      deleteCall={() => deletePerson(person.id)}
     />
   )
 

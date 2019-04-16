@@ -82,7 +82,10 @@ const App = () => {
         numberValue={newNumber} numberHandler={handleNumberChange}
       />
       <h2>Numerot</h2>
-      <PersonList persons={filteredPersons} />
+      <PersonList
+        persons={filteredPersons}
+        setPersons={setPersons}
+      />
     </div>
   )
 

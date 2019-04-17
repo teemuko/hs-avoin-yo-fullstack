@@ -32,15 +32,40 @@ const App = () => {
     setNewNumber('')
   }
 
+  const updateNumber = () => {
+    const selectedPerson = persons.find(person =>
+      person.name === newName
+    )
+
+    if ((selectedPerson.number !== '') &&
+      (!window.confirm(`${selectedPerson.name} on jo luettelossa, korvataanko vanha numero uudella?`))) {
+      return;
+    }
+
+    const personObject = { ...selectedPerson, number: newNumber }
+
+    personService
+      .update(personObject.id, personObject)
+      .then(updatedPerson => {
+
+        const index = persons.findIndex(person =>
+          person.id === updatedPerson.id
+        )
+        persons[index] = updatedPerson
+
+        setPersons(persons)
+        clearInputFields()
+      })
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
-    let namesArray = persons.map(person =>
+    const namesArray = persons.map(person =>
       person.name
     )
 
     if (namesArray.includes(newName)) {
-      window.alert(`${newName} on jo luettelossa`)
-      clearInputFields()
+      updateNumber();
       return;
     }
 

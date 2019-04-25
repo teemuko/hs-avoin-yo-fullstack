@@ -35,7 +35,7 @@ const App = () => {
     setNotificationMessage(message)
 
     setTimeout(() => {
-      setNotificationType('normal')
+      setNotificationType('')
       setNotificationMessage(null)
     }, timeout)
   }

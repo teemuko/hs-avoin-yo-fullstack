@@ -72,6 +72,13 @@ const App = () => {
         addNotification(
           `Henkilön ${selectedPerson.name} numero vaihdettu`, 'normal', 5000)
       })
+      .catch(error => {
+        setPersons(persons.filter(person =>
+          person.id !== selectedPerson.id))
+
+        addNotification(
+          `Henkilö ${selectedPerson.name} oli jo poistettu`, 'error', 5000)
+      })
   }
 
   const addPerson = (event) => {

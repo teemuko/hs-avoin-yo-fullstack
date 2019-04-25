@@ -24,6 +24,13 @@ const PersonList = ({ persons, setPersons, addNotification }) => {
         addNotification(
           `Poistettiin ${selectedPerson.name}`, 'normal', 5000)
       })
+      .catch(error => {
+        setPersons(persons.filter(person =>
+          person.id !== selectedPerson.id))
+
+        addNotification(
+          `Henkilö ${selectedPerson.name} oli jo poistettu`, 'error', 5000)
+      })
   }
 
   const rows = () => persons.map(person =>

@@ -3,12 +3,15 @@ import personService from './services/persons.js'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import PersonList from './components/PersonList'
+import Notification from './components/Notification'
 
 const App = () => {
   const [ persons, setPersons] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+  const [ notificationMessage, setNotificationMessage] = useState('')
+  const [ notificationType, setNotificationType] = useState('')
 
   const hook = () => {
     personService
@@ -26,6 +29,16 @@ const App = () => {
           person.name.toLowerCase()
             .indexOf(filter.toLowerCase()) > -1
       ))
+
+  const addNotification = (message, type, timeout) => {
+    setNotificationType(type)
+    setNotificationMessage(message)
+
+    setTimeout(() => {
+      setNotificationType('normal')
+      setNotificationMessage(null)
+    }, timeout)
+  }
 
   const clearInputFields = () => {
     setNewName('')
@@ -55,6 +68,9 @@ const App = () => {
 
         setPersons(persons)
         clearInputFields()
+
+        addNotification(
+          `Henkilön ${selectedPerson.name} numero vaihdettu`, 'normal', 5000)
       })
   }
 
@@ -79,6 +95,9 @@ const App = () => {
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
         clearInputFields()
+
+        addNotification(
+          `Lisättiin ${returnedPerson.name}`, 'normal', 5000)
       })
   }
 
@@ -97,6 +116,10 @@ const App = () => {
   return (
     <div>
       <h1>Puhelinluettelo</h1>
+      <Notification
+        message={notificationMessage}
+        type={notificationType}
+      />
       <Filter
         filter={filter} handler={handleFilterChange}
       />
@@ -110,6 +133,7 @@ const App = () => {
       <PersonList
         persons={filteredPersons}
         setPersons={setPersons}
+        addNotification={addNotification}
       />
     </div>
   )
